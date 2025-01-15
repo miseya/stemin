@@ -1,0 +1,44 @@
+{
+  "name": "@miseya/mpstemmer",
+  "version": "0.0.1",
+  "description": "Indonesian language stemmer with fuzzy search based on ariaghora/mpstemmer",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "browser": "./dist/index.global.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [
+    "natural-language-processing",
+    "information-retrieval",
+    "text-analysis",
+    "tokenizer",
+    "stemmer",
+    "nlp",
+    "bahasa",
+    "indonesia"
+  ],
+  "author": "sglkc",
+  "license": "MIT",
+  "repository": "github:miseya/mpstemmer",
+  "bugs": {
+    "url": "https://github.com/miseya/mpstemmer/issues"
+  },
+  "homepage": "https://github.com/miseya/mpstemmer",
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "unbuild": "^3.3.1"
+  }
+}
