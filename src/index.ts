@@ -1,1 +1,5 @@
-export const hello = (str: string) => console.log(str)
+import words from './dictionary/words'
+import synonyms from './dictionary/synonyms'
+import CSStemmer from './cs-stemmer'
+
+export { words, synonyms, CSStemmer }
