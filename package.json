@@ -17,7 +17,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "test": "vitest"
   },
   "keywords": [
     "natural-language-processing",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "tsup": "^8.3.5",
     "typescript": "^5.7.3",
-    "unbuild": "^3.3.1"
+    "unbuild": "^3.3.1",
+    "vitest": "^2.1.8"
   }
 }
