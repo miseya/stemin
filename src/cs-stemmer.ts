@@ -310,7 +310,8 @@ export default class CSStemmer {
   }
 
   stem(word: string, fallback = false): string {
-    let res = word.toLowerCase()
+    word = word.toLowerCase()
+    let res = word
 
     // untuk beberapa kasus, prefix harus dibuang terlebih dahulu
     if (
@@ -329,7 +330,7 @@ export default class CSStemmer {
       if (this.isInDict(res)) return res
     }
 
-    let noInflection = this.removeInflectionalSuffixes(word.toLowerCase())
+    let noInflection = this.removeInflectionalSuffixes(word)
     let noDerivation = this.removeDerivationalSuffix(noInflection)
     let noPrefix = this.removePrefixes(noDerivation, 0, '')
 
