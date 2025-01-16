@@ -51,6 +51,7 @@ export default class CSStemmer {
     } else if (res.endsWith('an')) {
       res = word.slice(0, -2)
     }
+
     return res
   }
 
@@ -143,8 +144,9 @@ export default class CSStemmer {
           res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 4))
         }
       }
-      // rule 14: men{c|d|j|z} -> men-{c|d|j|z}
-      else if (['menc', 'mend', 'menj', 'menz'].includes(res.slice(0, 4))) {
+      // rule 14: men{c|d|j|s|t|z} -> men-{c|d|j|s|t|z}
+      // https://github.com/sastrawi/sastrawi/blob/09db1/src/Sastrawi/Morphology/Disambiguator/DisambiguatorPrefixRule14.php
+      else if (['menc', 'mend', 'menj', 'mens', 'ment', 'menz'].includes(res.slice(0, 4))) {
         res = this.removePrefixes(res.slice(3), nRemovedSuffixes + 1, res.slice(0, 4))
       }
       // rule 15: menV -> me-nV | me-tV
@@ -158,26 +160,51 @@ export default class CSStemmer {
         }
       }
       // rule 16: meng{g|h|q|k} -> meng-{g|h|q|k}
-      else if (['mengg', 'mengh', 'mengq', 'mengk'].includes(res.slice(0, 4))) {
+      else if (['mengg', 'mengh', 'mengq', 'mengk'].includes(res.slice(0, 5))) {
         res = this.removePrefixes(res.slice(4), nRemovedSuffixes + 1, res.slice(0, 4))
       }
-      // rule 17: mengV -> meng-V | meng-kV
+      // rule 17: mengV -> meng-V | meng-kV | meng-ngV | mengV-, V = 'e'
       else if (res.startsWith('meng') && this.isVowel(res[4])) {
-        const case1 = res.slice(4)
-        const case2 = 'k' + res.slice(4)
-        const case3 = 'h' + res.slice(4)
-        if (this.isInDict(case1)) {
-          res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 4))
-        } else if (this.isInDict(case2)) {
-          res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 4))
-        } else if (this.isInDict(case3)) {
-          res = this.removePrefixes(case3, nRemovedSuffixes + 1, res.slice(0, 4))
+        if (res[4] === 'e') {
+          res = this.removePrefixes(res.slice(5), nRemovedSuffixes + 1, res.slice(0, 5))
+        } else {
+          const case1 = res.slice(4)
+          const case2 = 'k' + res.slice(4)
+          const case3 = 'h' + res.slice(4)
+
+          if (this.isInDict(case1)) {
+            res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 4))
+          } else if (this.isInDict(case2)) {
+            res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 4))
+          } else if (this.isInDict(case3)) {
+            res = this.removePrefixes(case3, nRemovedSuffixes + 1, res.slice(0, 4))
+          }
         }
       }
-      // rule 18: menyV -> meny-sV
+      // rule 18: menyV -> meny-sV | me-nyV
       else if (res.startsWith('meny') && this.isVowel(res[4])) {
-        res = 's' + res.slice(4)
-        res = this.removePrefixes(res, nRemovedSuffixes + 1, res.slice(0, 2))
+        if (res[4] === 'a') {
+          const case1 = res.slice(2)
+          const case2 = 's' + res.slice(4)
+
+          if (this.isInDict(case1)) {
+            res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 2))
+          } else if (this.isInDict(case2)) {
+            res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 4))
+          }
+        } else {
+          const case1 = res.slice(4)
+          const case2 = 'k' + res.slice(4)
+          const case3 = 'h' + res.slice(4)
+
+          if (this.isInDict(case1)) {
+            res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 4))
+          } else if (this.isInDict(case2)) {
+            res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 4))
+          } else if (this.isInDict(case3)) {
+            res = this.removePrefixes(case3, nRemovedSuffixes + 1, res.slice(0, 4))
+          }
+        }
       }
       // rule 19: mempV -> mem-pV, V != 'e' (mempunyai)
       else if (res.startsWith('memp') && this.isVowel(res[4]) && res[4] !== 'e') {
@@ -196,18 +223,18 @@ export default class CSStemmer {
       else if (res.startsWith('per') && this.isVowel(res[3])) {
         const case1 = res.slice(3)
         const case2 = res.slice(2)
-        if (this.isInDict(case1)) {
-          res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 3))
-        } else if (this.isInDict(case2)) {
+        if (this.isInDict(case2)) {
           res = this.removePrefixes(case2, nRemovedSuffixes + 1, res.slice(0, 2))
+        } else if (this.isInDict(case1)) {
+          res = this.removePrefixes(case1, nRemovedSuffixes + 1, res.slice(0, 3))
         }
       }
       // rule 22: perCAP -> per-CAP, C != 'r', P != 'er'
-      else if (res[2] === 'r' && res[3] !== 'r' && this.isConsonant(res[3]) && res.slice(5, 7) !== 'er') {
+      else if (res.startsWith('per') && res[3] !== 'r' && this.isConsonant(res[3]) && res.slice(5, 7) !== 'er') {
         res = this.removePrefixes(res.slice(3), nRemovedSuffixes + 1, res.slice(0, 3))
       }
       // rule 23: perCAerV -> per-CAerV, C != 'r' (perceraian)
-      else if (res[2] === 'r' && res[3] !== 'r' && this.isConsonant(res[3])) {
+      else if (res.startsWith('per') && res[3] !== 'r' && this.isConsonant(res[3])) {
         res = this.removePrefixes(res.slice(3), nRemovedSuffixes + 1, res.slice(0, 3))
       }
       // rule 24: pem{b|f|v} -> pem-{b|f|v}
@@ -239,7 +266,7 @@ export default class CSStemmer {
         }
       }
       // rule 28: peng{g|h|q} -> peng-{g|h|q|k}
-      else if (['pengg', 'pengh', 'pengq', 'pengk'].includes(res.slice(0, 4))) {
+      else if (['pengg', 'pengh', 'pengq', 'pengk'].includes(res.slice(0, 5))) {
         res = this.removePrefixes(res.slice(4), nRemovedSuffixes + 1, res.slice(0, 4))
       }
       // rule 29: pengV -> peng-V | peng-kV
@@ -255,22 +282,22 @@ export default class CSStemmer {
           res = this.removePrefixes(case3, nRemovedSuffixes + 1, res.slice(0, 4))
         }
       }
-      // rule 30: penyV -> peny-sV
+      // rule 30: penyV -> peny-sV | pe-nyV
       else if (res.startsWith('peny') && this.isVowel(res[4])) {
         res = 's' + res.slice(4)
         res = this.removePrefixes(res, nRemovedSuffixes + 1, res.slice(0, 2))
       }
-      // rule 31: penlV -> pel-V, 'pelajar' ? 'ajar'
-      else if (res.startsWith('pel')) {
+      // rule 31: penlV -> pe-lV, 'pelajar' ? 'ajar'
+      else if (res.startsWith('pel') && this.isVowel(res[3])) {
         if (res === 'pelajar') {
           res = 'ajar'
         } else {
-          res = this.removePrefixes(res.slice(3), nRemovedSuffixes + 1, res.slice(0, 3))
+          res = this.removePrefixes(res.slice(2), nRemovedSuffixes + 1, res.slice(0, 2))
         }
       }
       // rule 32: peCP -> pe-CP, C != {r|w|y|l|m|n}, P != 'er'
       else if (!['r', 'w', 'y', 'l', 'm', 'n'].includes(res[3]) && res.slice(4, 6) !== 'er') {
-        res = this.removePrefixes(res.slice(3), nRemovedSuffixes + 1, res.slice(0, 3))
+        res = this.removePrefixes(res.slice(2), nRemovedSuffixes + 1, res.slice(0, 2))
       }
       // rule 33: pe-C1erC2 -> per-C1erC2, C != {r|w|y|l|m|n}
       else if (!['r', 'w', 'y', 'l', 'm', 'n'].includes(res[3])) {
@@ -282,37 +309,36 @@ export default class CSStemmer {
     return res
   }
 
-  stem(word: string): string {
-    let res = word
+  stem(word: string, fallback = false): string {
+    let res = word.toLowerCase()
 
     // untuk beberapa kasus, prefix harus dibuang terlebih dahulu
     if (
-      (word.startsWith('be') && word.endsWith('lah')) ||
-        (word.startsWith('be') && word.endsWith('an')) ||
-        (word.startsWith('be') && word.endsWith('i')) ||
-        (word.startsWith('me') && word.endsWith('i')) ||
-        (word.startsWith('di') && word.endsWith('i')) ||
-        (word.startsWith('pe') && word.endsWith('i')) ||
-        (word.startsWith('te') && word.endsWith('i'))
+      (res.startsWith('be') && res.endsWith('lah')) ||
+        (res.startsWith('be') && res.endsWith('an')) ||
+        (res.startsWith('be') && res.endsWith('i')) ||
+        (res.startsWith('me') && res.endsWith('i')) ||
+        (res.startsWith('di') && res.endsWith('i')) ||
+        (res.startsWith('pe') && res.endsWith('i')) ||
+        (res.startsWith('te') && res.endsWith('i'))
     ) {
-      res = this.removePrefixes(word, 0, '')
+      res = this.removePrefixes(res, 0, '')
       res = this.removeInflectionalSuffixes(res)
       res = this.removeDerivationalSuffix(res)
 
-      if (this.isInDict(res)) {
-        return res
-      }
+      if (this.isInDict(res)) return res
     }
 
-    res = this.removeInflectionalSuffixes(word)
+    let noInflection = this.removeInflectionalSuffixes(word.toLowerCase())
+    let noDerivation = this.removeDerivationalSuffix(noInflection)
+    let noPrefix = this.removePrefixes(noDerivation, 0, '')
+
+    if (this.isInDict(noPrefix)) return noPrefix
+
+    // jika tidak ada di kamus, coba ulang dengan urutan berbeda
+    res = this.removePrefixes(noInflection, 0, '')
     res = this.removeDerivationalSuffix(res)
-    res = this.removePrefixes(res, 0, '')
 
-    if (this.isInDict(res)) {
-      return res
-    }
-
-    // https://github.com/ariaghora/mpstemmer/blob/25a5f/mpstemmer/csstemmer.py#L278
-    return res
+    return fallback ? word : res
   }
 }
