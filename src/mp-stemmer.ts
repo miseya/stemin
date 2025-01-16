@@ -1,3 +1,4 @@
+import { closest } from 'fastest-levenshtein'
 import formalSet from './dict/formal-set'
 import informalMap from './dict/informal-map'
 import CSStemmer from './cs-stemmer'
@@ -13,6 +14,15 @@ export default class MPStemmer {
     this.synonyms = synonyms
     this.memo = new Map()
     this.csstemmer = new CSStemmer(this.words)
+
+    // filtering kata ambigu dari kamus bawaan
+    if (this.words === formalSet) {
+      [
+        'adap', 'kukur', 'ketemu', 'kesohor', 'soba', 'urang', 'urita',
+        'gera',
+      ]
+        .forEach((word) => formalSet.delete(word))
+    }
   }
 
   isInDict(word: string): boolean {
@@ -112,7 +122,7 @@ export default class MPStemmer {
 
     // layer 6: fuzzy search jika masih tidak cocok
     if (maybeNonstandard) {
-      // TODO
+      res = closest(res, Array.from(this.words))
     }
 
     this.setMemo(word, res)
