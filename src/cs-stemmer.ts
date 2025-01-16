@@ -1,9 +1,9 @@
-import wordsDict from './dictionary/words'
+import formalSet from './dict/formal-set'
 
 export default class CSStemmer {
   words: Set<string>
 
-  constructor(words: Set<string> = wordsDict) {
+  constructor(words: Set<string> = formalSet) {
     this.words = words
   }
 

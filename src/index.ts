@@ -1,5 +1,9 @@
-import words from './dictionary/words'
-import synonyms from './dictionary/synonyms'
+import formalSet from './dict/formal-set'
+import informalMap from './dict/informal-map'
 import CSStemmer from './cs-stemmer'
 
-export { words, synonyms, CSStemmer }
+export {
+  formalSet,
+  informalMap,
+  CSStemmer,
+}
