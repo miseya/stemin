@@ -1,4 +1,5 @@
 export default new Map([
+  ["dulu", "dahulu"],
 
   // https://github.com/ariaghora/mpstemmer
   ["ntuh", "itu"],

@@ -70,7 +70,7 @@ export default class MPStemmer {
     let res = word
 
     if (res.endsWith('p') && res.at(-2) === 'e') {
-      res = res.slice(0, -2) + 'a' + res.slice(-2)
+      res = res.slice(0, -2) + 'a' + res.slice(-1)
     }
 
     return res
@@ -80,7 +80,7 @@ export default class MPStemmer {
     let res = word
 
     if (!/a|i|u|e|o/.test(res.slice(-1)) && res.at(-2) === 'e') {
-      const standard = res.slice(0, -2) + 'a' + res.slice(-2)
+      const standard = res.slice(0, -2) + 'a' + res.slice(-1)
       if (this.isInDict(standard)) res = standard
     }
 
@@ -99,7 +99,6 @@ export default class MPStemmer {
 
     // layer 2: lakukan stemming
     let stem = this.csstemmer.stem(res)
-
     if (this.isInDict(stem)) return this.setMemo(word, stem)
 
     // layer 3: cek kata tidak standar terafiksasi dan bakukan jika mungkin
@@ -107,10 +106,10 @@ export default class MPStemmer {
 
     if (maybeNonstandard) {
       res = this.fixSuffix(res)
-      if (this.isInDict(stem)) return this.setMemo(word, stem)
+      if (this.isInDict(res)) return this.setMemo(word, res)
 
       res = this.fixPrefix(res)
-      if (this.isInDict(stem)) return this.setMemo(word, stem)
+      if (this.isInDict(res)) return this.setMemo(word, res)
     }
 
     // layer 4: lakukan stemming standar karena sudah dibakukan
@@ -121,12 +120,14 @@ export default class MPStemmer {
     res = this.ensureStandardRoot(res)
 
     // layer 6: fuzzy search jika masih tidak cocok
-    if (maybeNonstandard) {
+    if (!this.isInDict(res) && !this.synonyms.has(res) && maybeNonstandard) {
       res = closest(res, Array.from(this.words))
     }
 
     this.setMemo(word, res)
 
-    return this.words.has(res) ? res : word
+    return this.words.has(res)
+      ? res : this.synonyms.has(res)
+        ? this.synonyms.get(res) as string : word
   }
 }

@@ -62,7 +62,7 @@ export default class CSStemmer {
       return res
     }
 
-    if (['di', 'ke', 'se', 'ku'].includes(res)) {
+    if (['di', 'ke', 'se', 'ku'].includes(res.slice(0, 2))) {
       res = this.removePrefixes(res, 2)
       return res
     }
