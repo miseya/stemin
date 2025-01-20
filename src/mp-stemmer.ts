@@ -4,13 +4,32 @@ import informalMap from './dict/informal-map'
 import CSStemmer from './cs-stemmer'
 
 export default class MPStemmer {
+  /**
+   * Kamus kata dasar
+   * @example
+   * stemmer.words.has('halo')     // Cek apakah kata "halo" ada di kamus
+   * stemmer.words.add('engga')    // Tambah kata "engga"
+   * stemmer.words.delete('halo')  // Hapus kata "halo"
+   */
   words: Set<string>
+  /**
+   * Kamus sinonim/perbaikan kata dalam format `[kata awal]: [kata akhir]`
+   * @example
+   * stemmer.synonyms.get('kalo')        // Ambil kata baku dari "kalo"
+   * stemmer.synonyms.set('ga', 'tidak') // Tambah pasangan kata baru
+   * stemmer.synonyms.delete('kalo')     // Hapus kata "kalo"
+   */
   synonyms: Map<string, string>
-  memo: Map<string, string>
-  csstemmer: CSStemmer
 
-  constructor(words: Set<string> = formalSet, synonyms: Map<string, string> = informalMap) {
-    this.words = words
+  private memo: Map<string, string>
+  private csstemmer: CSStemmer
+
+  /**
+  * @param [words=formalSet] Kamus kata dasar
+  * @param [synonyms=informalMap] Kamus kata ganti/sinonim/perbaikan kata
+  */
+  constructor(words: string[] | Set<string> = formalSet, synonyms: Map<string, string> = informalMap) {
+    this.words = Array.isArray(words) ? new Set(words) : words
     this.synonyms = synonyms
     this.memo = new Map()
     this.csstemmer = new CSStemmer(this.words)
@@ -25,19 +44,27 @@ export default class MPStemmer {
     }
   }
 
-  isInDict(word: string): boolean {
-    return this.words.has(word)
-  }
-
-  setMemo(word: string, stem: string): string {
+  private setMemo(word: string, stem: string): string {
     this.memo.set(word, stem)
     return stem
   }
 
+  /**
+   * Cek apakah kata memiliki afiks. `m|n|ng|ny|ke-V-i|in|an`
+   */
   checkAffixed(word: string): boolean {
     return /^(m|n|ng|ny|ke)|(i|in|an)$/.test(word)
   }
 
+  /**
+   * Perbaiki prefiks kata tidak baku agar menjadi baku
+   * @example
+   * nyapa  -> menyapa
+   * ngecas -> cas
+   * ngirit -> mengirit
+   * kesini -> sini
+   * gini   -> begitu
+   */
   fixPrefix(word: string): string {
     let res = word
 
@@ -49,13 +76,19 @@ export default class MPStemmer {
       }
     } else if (res.startsWith('ke')) {
       res = res.slice(2)
-    } else if (/gini|gitu/.test(res)) {
+    } else if (['gini', 'gitu'].includes(res)) {
       res = 'be' + res
     }
 
     return res
   }
 
+  /**
+   * Perbaiki sufiks kata tidak baku
+   * @example
+   * lengkapin -> lengkap
+   * temenin   -> temen
+   */
   fixSuffix(word: string): string {
     let res = word
 
@@ -66,6 +99,12 @@ export default class MPStemmer {
     return res
   }
 
+  /**
+   * Ubah kata tidak baku menjadi kata baku
+   * @example
+   * asep   -> asap
+   * pengep -> pengap
+   */
   standardify(word: string): string {
     let res = word
 
@@ -76,17 +115,28 @@ export default class MPStemmer {
     return res
   }
 
+  /**
+   * Perbaiki kata tidak baku menjadi kata baku (naif)
+   * @example
+   * sebel  -> sebal
+   * nyesel -> nyesal
+   */
   ensureStandardRoot(word: string): string {
     let res = word
 
     if (!/a|i|u|e|o/.test(res.slice(-1)) && res.at(-2) === 'e') {
       const standard = res.slice(0, -2) + 'a' + res.slice(-1)
-      if (this.isInDict(standard)) res = standard
+      if (this.words.has(standard)) res = standard
     }
 
     return res
   }
 
+  /**
+   * Stemming (hapus imbuhan dari kata) untuk mendapatkan kata dasar
+   * @param word Kata yang akan di-stem
+   * @param [fuzzy=false] Gunakan Levenshtein distance untuk mendapatkan kata terdekat?
+   */
   stem(word: string, fuzzy = false): string {
     word = word.toLowerCase()
     let res = word
@@ -99,17 +149,17 @@ export default class MPStemmer {
 
     // layer 2: lakukan stemming
     let stem = this.csstemmer.stem(res)
-    if (this.isInDict(stem)) return this.setMemo(word, stem)
+    if (this.words.has(stem)) return this.setMemo(word, stem)
 
     // layer 3: cek kata tidak standar terafiksasi dan bakukan jika mungkin
     let maybeNonstandard = this.checkAffixed(res)
 
     if (maybeNonstandard) {
       res = this.fixSuffix(res)
-      if (this.isInDict(res)) return this.setMemo(word, res)
+      if (this.words.has(res)) return this.setMemo(word, res)
 
       res = this.fixPrefix(res)
-      if (this.isInDict(res)) return this.setMemo(word, res)
+      if (this.words.has(res)) return this.setMemo(word, res)
     }
 
     // layer 4: lakukan stemming standar karena sudah dibakukan
@@ -120,7 +170,7 @@ export default class MPStemmer {
     res = this.ensureStandardRoot(res)
 
     // layer 6: fuzzy search jika masih tidak cocok
-    if (!this.isInDict(res) && !this.synonyms.has(res) && maybeNonstandard && fuzzy) {
+    if (!this.words.has(res) && !this.synonyms.has(res) && maybeNonstandard && fuzzy) {
       res = closest(res, this.words)
     }
 

@@ -1,28 +1,43 @@
 import formalSet from './dict/formal-set'
 
 export default class CSStemmer {
+  /**
+   * Kamus kata dasar
+   * @example
+   * stemmer.words.has('halo')     // Cek apakah kata "halo" ada di kamus
+   * stemmer.words.add('engga')    // Tambah kata "engga"
+   * stemmer.words.delete('halo')  // Hapus kata "halo"
+   */
   words: Set<string>
 
-  constructor(words: Set<string> = formalSet) {
-    this.words = words
+  /**
+  * @param [words=formalSet] Kamus kata dasar
+  */
+  constructor(words: string[] | Set<string> = formalSet) {
+    this.words = Array.isArray(words) ? new Set(words) : words
   }
 
+  /**
+   * Cek apakah string adalah huruf vokal. `a|i|u|e|o`
+   */
   isVowel(c: string): boolean {
     return 'aiueo'.includes(c)
   }
 
+  /**
+   * Cek apakah string adalah huruf konsonan. `!(isVowel)`
+   */
   isConsonant(c: string): boolean {
     return !this.isVowel(c)
   }
 
-  isInDict(word: string): boolean {
-    return this.words.has(word)
-  }
-
+  /**
+   * Menghapus sufiks infleksi dari kata. `V-kah|lah|tah|pun|nya|ku|mu`
+   */
   removeInflectionalSuffixes(word: string): string {
     let res = word
 
-    if (this.isInDict(res) || res.length <= 5) {
+    if (this.words.has(res) || res.length <= 5) {
       return res
     }
 
@@ -37,10 +52,13 @@ export default class CSStemmer {
     return res
   }
 
+  /**
+   * Menghapus sufiks derivasi dari kata. `V-i|kan|an`
+   */
   removeDerivationalSuffix(word: string): string {
     let res = word
 
-    if (this.isInDict(res) || res.length <= 5) {
+    if (this.words.has(res) || res.length <= 5) {
       return res
     }
 
@@ -55,10 +73,13 @@ export default class CSStemmer {
     return res
   }
 
+  /**
+   * Menghapus prefiks kata. `di|ke|se|ku|be|me|pe|te-V`
+   */
   removePrefixes(word: string, sliceLength: number = 0): string {
     let res = word.slice(sliceLength)
 
-    if (this.isInDict(res) || res.length <= 5) {
+    if (this.words.has(res) || res.length <= 5) {
       return res
     }
 
@@ -73,9 +94,9 @@ export default class CSStemmer {
         const case1 = res.slice(3)
         const case2 = res.slice(2)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -103,9 +124,9 @@ export default class CSStemmer {
         const case1 = res.slice(3)
         const case2 = res.slice(2)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -141,9 +162,9 @@ export default class CSStemmer {
         const case1 = res.slice(2)
         const case2 = 'p' + res.slice(3)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -157,9 +178,9 @@ export default class CSStemmer {
         const case1 = res.slice(2)
         const case2 = 't' + res.slice(3)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -175,15 +196,15 @@ export default class CSStemmer {
         const case4 = 'h' + res.slice(4)
         const case5 = res.slice(5)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
-        } else if (this.isInDict(case3)) {
+        } else if (this.words.has(case3)) {
           res = this.removePrefixes(case3)
-        } else if (this.isInDict(case4)) {
+        } else if (this.words.has(case4)) {
           res = this.removePrefixes(case4)
-        } else if (this.isInDict(case5)) {
+        } else if (this.words.has(case5)) {
           res = this.removePrefixes(case5)
         }
       }
@@ -193,9 +214,9 @@ export default class CSStemmer {
           const case1 = res.slice(2)
           const case2 = 's' + res.slice(4)
 
-          if (this.isInDict(case1)) {
+          if (this.words.has(case1)) {
             res = this.removePrefixes(case1)
-          } else if (this.isInDict(case2)) {
+          } else if (this.words.has(case2)) {
             res = this.removePrefixes(case2)
           }
         } else {
@@ -204,13 +225,13 @@ export default class CSStemmer {
           const case3 = 's' + res.slice(4)
           const case4 = res.slice(4)
 
-          if (this.isInDict(case1)) {
+          if (this.words.has(case1)) {
             res = this.removePrefixes(case1)
-          } else if (this.isInDict(case2)) {
+          } else if (this.words.has(case2)) {
             res = this.removePrefixes(case2)
-          } else if (this.isInDict(case3)) {
+          } else if (this.words.has(case3)) {
             res = this.removePrefixes(case3)
-          } else if (this.isInDict(case4)) {
+          } else if (this.words.has(case4)) {
             res = this.removePrefixes(case4)
           }
         }
@@ -235,9 +256,9 @@ export default class CSStemmer {
         const case1 = res.slice(2)
         const case2 = res.slice(3)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -258,9 +279,9 @@ export default class CSStemmer {
         const case1 = 'p' + res.slice(3)
         const case2 = res.slice(2)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -273,9 +294,9 @@ export default class CSStemmer {
         const case1 = 't' + res.slice(3)
         const case2 = res.slice(2)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -290,13 +311,13 @@ export default class CSStemmer {
         const case3 = 'h' + res.slice(4)
         const case4 = res.slice(5)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
-        } else if (this.isInDict(case3)) {
+        } else if (this.words.has(case3)) {
           res = this.removePrefixes(case3)
-        } else if (this.isInDict(case4)) {
+        } else if (this.words.has(case4)) {
           res = this.removePrefixes(case4)
         }
       }
@@ -305,9 +326,9 @@ export default class CSStemmer {
         const case1 = 's' + res.slice(4)
         const case2 = res.slice(2)
 
-        if (this.isInDict(case1)) {
+        if (this.words.has(case1)) {
           res = this.removePrefixes(case1)
-        } else if (this.isInDict(case2)) {
+        } else if (this.words.has(case2)) {
           res = this.removePrefixes(case2)
         }
       }
@@ -332,6 +353,11 @@ export default class CSStemmer {
     return res
   }
 
+  /**
+   * Stemming kata berimbuhan untuk mendapatkan kata dasar
+   * @param word Kata yang akan di-stem
+   * @param [fallback=false] Kembalikan kata awal jika tidak ada di kamus?
+   */
   stem(word: string, fallback = false): string {
     word = word.toLowerCase()
     let res = word
@@ -350,7 +376,7 @@ export default class CSStemmer {
       res = this.removeInflectionalSuffixes(res)
       res = this.removeDerivationalSuffix(res)
 
-      if (this.isInDict(res)) return res
+      if (this.words.has(res)) return res
     }
 
     let noInflection = this.removeInflectionalSuffixes(word)
@@ -363,7 +389,7 @@ export default class CSStemmer {
       lastRes = this.removePrefixes(res)
     }
 
-    if (this.isInDict(res)) return res
+    if (this.words.has(res)) return res
 
     // jika tidak ada di kamus, coba ulang dengan urutan berbeda
     res = this.removePrefixes(word)
