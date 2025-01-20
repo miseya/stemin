@@ -1,7 +1,7 @@
 {
-  "name": "@miseya/mpstemmer",
+  "name": "stemin",
   "version": "0.0.1",
-  "description": "Indonesian language stemmer with fuzzy search based on ariaghora/mpstemmer",
+  "description": "Indonesian language stemmer with Levenshtein distance based on ariaghora/mpstemmer and damzaky/sastrawijs",
   "type": "module",
   "exports": {
     ".": {
@@ -18,7 +18,11 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "vitest"
+    "prepack": "tsup",
+    "bench": "vitest bench --run",
+    "bench:watch": "vitest bench",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "keywords": [
     "natural-language-processing",
@@ -32,11 +36,11 @@
   ],
   "author": "sglkc",
   "license": "MIT",
-  "repository": "github:miseya/mpstemmer",
+  "repository": "github:miseya/stemin",
   "bugs": {
-    "url": "https://github.com/miseya/mpstemmer/issues"
+    "url": "https://github.com/miseya/stemin/issues"
   },
-  "homepage": "https://github.com/miseya/mpstemmer",
+  "homepage": "https://github.com/miseya/stemin",
   "devDependencies": {
     "sastrawijs": "^1.1.0",
     "tsup": "^8.3.5",
