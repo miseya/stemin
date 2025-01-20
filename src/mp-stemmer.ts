@@ -87,7 +87,7 @@ export default class MPStemmer {
     return res
   }
 
-  stem(word: string): string {
+  stem(word: string, fuzzy = false): string {
     word = word.toLowerCase()
     let res = word
 
@@ -120,8 +120,8 @@ export default class MPStemmer {
     res = this.ensureStandardRoot(res)
 
     // layer 6: fuzzy search jika masih tidak cocok
-    if (!this.isInDict(res) && !this.synonyms.has(res) && maybeNonstandard) {
-      res = closest(res, Array.from(this.words))
+    if (!this.isInDict(res) && !this.synonyms.has(res) && maybeNonstandard && fuzzy) {
+      res = closest(res, this.words)
     }
 
     this.setMemo(word, res)

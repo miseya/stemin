@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  fastest-levenshtein:
+    hash: pe3waeytznsrf6vseck6jti36m
+    path: patches/fastest-levenshtein.patch
+
 importers:
 
   .:
     dependencies:
       fastest-levenshtein:
         specifier: ^1.0.16
-        version: 1.0.16
+        version: 1.0.16(patch_hash=pe3waeytznsrf6vseck6jti36m)
     devDependencies:
       sastrawijs:
         specifier: ^1.1.0
@@ -2466,7 +2471,7 @@ snapshots:
 
   expect-type@1.1.0: {}
 
-  fastest-levenshtein@1.0.16: {}
+  fastest-levenshtein@1.0.16(patch_hash=pe3waeytznsrf6vseck6jti36m): {}
 
   fdir@6.4.2(picomatch@4.0.2):
     optionalDependencies:

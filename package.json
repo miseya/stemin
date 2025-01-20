@@ -50,5 +50,10 @@
   },
   "dependencies": {
     "fastest-levenshtein": "^1.0.16"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "fastest-levenshtein": "patches/fastest-levenshtein.patch"
+    }
   }
 }
