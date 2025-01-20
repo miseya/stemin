@@ -85,7 +85,7 @@ export const rules = {
 
   'rule 17: mengV -> meng-V | meng-kV': [
     ['mengerat', 'erat'],
-    ['mengira', 'kira'],
+    ['mengokang', 'kokang'],
     ['mengecil', 'kecil'],
     ['mengecas', 'cas'],
     ['mengecat', 'cat'],
@@ -157,9 +157,8 @@ export const rules = {
   ],
 
   'rule 29: pengV -> peng-V | peng-kV': [
-    ['pengalihan', 'alih'],
     ['pengikat', 'ikat'],
-    ['pengawal', 'kawal'],
+    ['pengait', 'kait'],
     ['penguat', 'kuat'],
     ['pengetahuan', 'tahu'],
     ['pengeblog', 'blog'],
@@ -241,7 +240,7 @@ export const informalWords = [
   ["kawinan", "kawin"],
   ["mainan", "main"],
   ["parkiran", "parkir"],
-  ["duluan", "dulu"],
+  ["duluan", "dahulu"],
   ["gendutan", "gendut"],
   ["karatan", "karat"],
   ["palingan", "paling"],

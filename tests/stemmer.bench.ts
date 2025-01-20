@@ -11,17 +11,17 @@ bench('sastrawijs', () => {
   dataset.forEach((word) => stemmer.stem(word))
 })
 
-bench('csstemmer', () => {
+bench('cs-stemmer', () => {
   const stemmer = new CSStemmer()
   dataset.forEach((word) => stemmer.stem(word))
 })
 
-bench('mpstemmer', () => {
+bench('mp-stemmer', () => {
   const stemmer = new MPStemmer()
   dataset.forEach((word) => stemmer.stem(word))
 })
 
-bench('mpstemmer w/ fuzzy', () => {
+bench('mp-stemmer w/ fuzzy', () => {
   const stemmer = new MPStemmer()
   dataset.forEach((word) => stemmer.stem(word, true))
 })
