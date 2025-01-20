@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   fastest-levenshtein:
-    hash: pe3waeytznsrf6vseck6jti36m
+    hash: h5joakroxks3zfunbbeqreewlq
     path: patches/fastest-levenshtein.patch
 
 importers:
@@ -15,7 +15,7 @@ importers:
     dependencies:
       fastest-levenshtein:
         specifier: ^1.0.16
-        version: 1.0.16(patch_hash=pe3waeytznsrf6vseck6jti36m)
+        version: 1.0.16(patch_hash=h5joakroxks3zfunbbeqreewlq)
     devDependencies:
       sastrawijs:
         specifier: ^1.1.0
@@ -2471,7 +2471,7 @@ snapshots:
 
   expect-type@1.1.0: {}
 
-  fastest-levenshtein@1.0.16(patch_hash=pe3waeytznsrf6vseck6jti36m): {}
+  fastest-levenshtein@1.0.16(patch_hash=h5joakroxks3zfunbbeqreewlq): {}
 
   fdir@6.4.2(picomatch@4.0.2):
     optionalDependencies:

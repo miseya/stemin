@@ -8,20 +8,20 @@ const dataset = benchmarkDataset.flatMap((words) => words.toLowerCase().split(/ 
 
 bench('sastrawijs', () => {
   const stemmer = new Stemmer()
-  dataset.forEach((word) => stemmer.stem(word))
+  for (const word of dataset) stemmer.stem(word)
 })
 
 bench('cs-stemmer', () => {
   const stemmer = new CSStemmer()
-  dataset.forEach((word) => stemmer.stem(word))
+  for (const word of dataset) stemmer.stem(word)
 })
 
 bench('mp-stemmer', () => {
   const stemmer = new MPStemmer()
-  dataset.forEach((word) => stemmer.stem(word))
+  for (const word of dataset) stemmer.stem(word)
 })
 
 bench('mp-stemmer w/ fuzzy', () => {
   const stemmer = new MPStemmer()
-  dataset.forEach((word) => stemmer.stem(word, true))
+  for (const word of dataset) stemmer.stem(word, true)
 })

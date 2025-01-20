@@ -4,11 +4,11 @@ import { informalWords } from './imports'
 
 const stemmer = new MPStemmer()
 
-describe('nonstandard stemming', () => {
+describe('nonstandard stemming with fuzzy', () => {
   test.each(informalWords)(
     '%s -> %s',
     (word, expected) => {
-      expect(stemmer.stem(word)).toBe(expected)
+      expect(stemmer.stem(word, true)).toBe(expected)
     }
   )
 })

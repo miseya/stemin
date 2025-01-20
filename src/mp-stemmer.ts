@@ -174,10 +174,11 @@ export default class MPStemmer {
       res = closest(res, this.words)
     }
 
-    this.setMemo(word, res)
-
-    return this.words.has(res)
+    // cek jika kata ada di kamus atau sinonim
+    res = this.words.has(res)
       ? res : this.synonyms.has(res)
         ? this.synonyms.get(res) as string : word
+
+    return this.setMemo(word, res)
   }
 }
