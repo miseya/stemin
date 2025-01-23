@@ -27,9 +27,8 @@ const { MPStemmer } = require('stemin') // CommonJS
 ### Browser
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/stemin" defer></script>
-<script defer>
-// gunakan "defer" supaya script dieksekusi setelah library dimuat
+<script src="https://cdn.jsdelivr.net/npm/stemin"></script>
+<script>
 const { MPStemmer } = window.stemin
 </script>
 ```
