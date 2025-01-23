@@ -1,4 +1,4 @@
-import { closest } from 'fastest-levenshtein'
+import { distance } from 'fastest-levenshtein'
 import formalSet from './dict/formal-set'
 import informalMap from './dict/informal-map'
 import CSStemmer from './cs-stemmer'
@@ -171,7 +171,16 @@ export default class MPStemmer {
 
     // layer 6: fuzzy search jika masih tidak cocok
     if (!this.words.has(res) && !this.synonyms.has(res) && maybeNonstandard && fuzzy) {
-      res = closest(res, this.words)
+      let score = Infinity
+
+      for (const word of this.words) {
+        let dist = distance(res, word)
+
+        if (dist < score) {
+          score = dist
+          res = word
+        }
+      }
     }
 
     // cek jika kata ada di kamus atau sinonim
