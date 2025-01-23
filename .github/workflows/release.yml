@@ -44,8 +44,6 @@ jobs:
         id: get_version
         run: echo "PACKAGE_VERSION=v$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-
       - name: Check for version changes
         id: version_check
         run: |
@@ -64,7 +62,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm publish --no-git-checks
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          pnpm publish --no-git-checks
 
       - name: Create GitHub release and tag
         if: env.version_changed == 'true'

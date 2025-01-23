@@ -118,11 +118,11 @@ Hal ini dikarenakan `stemin` menggunakan data struktur yang sesuai (Set dan Map)
 
 ## Referensi
 
-- Prabono, A. G. (2020). Mpstemmer: a multi-phase stemmer for standard and nonstandard Indonesian words. *GitHub*. https://github.com/ariaghora/mpstemmer
-- Zaky, D. (2017). SastrawiJs: Indonesian language stemmer Javascript port of PHP Sastrawi project. *GitHub*. https://github.com/damzaky/sastrawijs
-- Librian, A. (2014). Sastrawi: High quality stemmer library for Indonesian Language (Bahasa). *GitHub*. https://github.com/sastrawi/sastrawi
 - Adriani, M., Asian, J., Nazief, B., Tahaghoghi, S. M., & Williams, H. E. (2007). Stemming Indonesian: A confix-stripping approach. *ACM Transactions on Asian Language Information Processing (TALIP), 6*(4), 1-33.
 - Arifin, A. Z., Mahendra, I. P. A. K., & Ciptaningtyas, H. T. (2009, April). Enhanced confix stripping stemmer and ants algorithm for classifying news document in indonesian language. In *The International Conference on Information & Communication Technology and Systems* (Vol. 5, pp. 149-158).
+- Librian, A. (2014). Sastrawi: High quality stemmer library for Indonesian Language (Bahasa). *GitHub*. https://github.com/sastrawi/sastrawi
+- Prabono, A. G. (2020). Mpstemmer: a multi-phase stemmer for standard and nonstandard Indonesian words. *GitHub*. https://github.com/ariaghora/mpstemmer
+- Zaky, D. (2017). SastrawiJs: Indonesian language stemmer Javascript port of PHP Sastrawi project. *GitHub*. https://github.com/damzaky/sastrawijs
 
 ## Lisensi
 
