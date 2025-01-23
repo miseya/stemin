@@ -54,10 +54,14 @@ jobs:
             echo "version_changed=false" >> $GITHUB_ENV
           fi
 
+      - name: Setup npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+
       - name: Publish to npm
         if: env.version_changed == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --no-git-checks
 
       - name: Create GitHub release and tag
