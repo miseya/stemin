@@ -52,6 +52,7 @@ jobs:
             echo "version_changed=true" >> $GITHUB_ENV
           else
             echo "version_changed=false" >> $GITHUB_ENV
+          fi
 
       - name: Publish to npm
         if: env.version_changed == 'true'
