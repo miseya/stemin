@@ -75,8 +75,8 @@ jobs:
           git push origin v$PACKAGE_VERSION
           BENCH_RESULTS="$(cat bench_results.txt)"
           RELEASE_NOTES="### Benchmark Results:
-          ```
+          \`\`\`
           $BENCH_RESULTS
-          ```"
+          \`\`\`"
           echo "$RELEASE_NOTES" > release_notes.md
           gh release create v$PACKAGE_VERSION --title "v$PACKAGE_VERSION" --notes-file release_notes.md
