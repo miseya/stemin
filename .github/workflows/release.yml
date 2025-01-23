@@ -42,7 +42,7 @@ jobs:
 
       - name: Get current version
         id: get_version
-        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+        run: echo "PACKAGE_VERSION=v$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
