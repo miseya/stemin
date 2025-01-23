@@ -45,7 +45,7 @@ jobs:
         id: version_check
         run: |
           git fetch --tags
-          PREV_VERSION=$(git describe --tags --abbrev=0 || echo "0.0.0")
+          PREV_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
           echo "Previous version: $PREV_VERSION"
           echo "Current version: $PACKAGE_VERSION"
           if [ "$PACKAGE_VERSION" != "$PREV_VERSION" ]; then
