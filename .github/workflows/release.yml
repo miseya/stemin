@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          fetch-tags: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -34,7 +37,7 @@ jobs:
         run: pnpm lint
 
       - name: Benchmark
-        run: pnpm vitest bench --run | tee bench_results.txt
+        run: pnpm vitest bench --run --no-color | tee bench_results.txt
         continue-on-error: true
 
       - name: Get current version
@@ -53,9 +56,6 @@ jobs:
           else
             echo "version_changed=false" >> $GITHUB_ENV
           fi
-
-      - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
 
       - name: Publish to npm
         if: env.version_changed == 'true'
