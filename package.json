@@ -22,7 +22,8 @@
     "bench": "vitest bench --run",
     "bench:watch": "vitest bench",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "lint": "tsc --noEmit"
   },
   "keywords": [
     "natural-language-processing",
