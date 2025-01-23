@@ -1,7 +1,7 @@
 # stemin
 
-[![Test Status](../../actions/workflows/test.yml/badge.svg)](../../actions/workflows/test.yml)
-[![Release Status](../../actions/workflows/release.yml/badge.svg)](../../actions/workflows/release.yml)
+[![Test Status](https://github.com/miseya/stemin/actions/workflows/test.yml/badge.svg)](https://github.com/miseya/stemin/actions/workflows/test.yml)
+[![Release Status](https://github.com/miseya/stemin/actions/workflows/release.yml/badge.svg)](https://github.com/miseya/stemin/actions/workflows/release.yml)
 [![NPM Version](https://img.shields.io/npm/v/stemin)](https://www.npmjs.com/package/stemin)
 
 > *stem* + in(donesian)
@@ -59,6 +59,9 @@ Fitur utama dari `stemin` adalah kecepatan dan akurasi yang lebih baik dibanding
 
 Berdasarkan hasil pengujian, disimpulkan bahwa `stemin` lebih akurat dalam melakukan stemming. Walaupun menggunakan kamus yang sama, `sastrawijs` tidak dapat memenuhi beberapa aturan yang ada.
 
+<details>
+    <summary>Hasil pengujian</summary>
+
 ```
  ❯ tests/sastrawijs.test.ts (86 tests | 11 failed) 48ms
    × rule 1: berV -> ber-V | be-rV > berapi -> api 11ms
@@ -86,10 +89,15 @@ Berdasarkan hasil pengujian, disimpulkan bahwa `stemin` lebih akurat dalam melak
  ✓ tests/cs-stemmer.test.ts (86 tests) 30ms
 ```
 
+</details>
+
 ### Benchmark
 
 Secara performa, proses *confix stripping* dari `stemin` lebih unggul dibandingkan dengan [`sastrawijs`](https://github.com/damzaky/sastrawijs/commit/635b38d2ed16e74a6b2c7927b24495cfdfc763fc) hingga >15x lipat.
 Hal ini dikarenakan `stemin` menggunakan data struktur yang sesuai (Set dan Map) untuk menyimpan sekitar ~29,933 kata dasar dan ~1,495 pasangan kata non standar.
+
+<details>
+    <summary>Hasil benchmark</summary>
 
 ```
  ✓ tests/stemmer.bench.ts (4) 3465ms
@@ -106,6 +114,8 @@ Hal ini dikarenakan `stemin` menggunakan data struktur yang sesuai (Set dan Map)
     15.79x faster than sastrawijs
     154.90x faster than mp-stemmer w/ fuzzy
 ```
+
+</details>
 
 ## Referensi
 

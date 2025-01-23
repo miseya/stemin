@@ -34,7 +34,7 @@ jobs:
         run: pnpm lint
 
       - name: Benchmark
-        run: pnpm bench | tee bench_results.txt
+        run: pnpm vitest bench --run | tee bench_results.txt
         continue-on-error: true
 
       - name: Get current version
@@ -73,7 +73,10 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag v$PACKAGE_VERSION
           git push origin v$PACKAGE_VERSION
-          BENCH_RESULTS=$(cat bench_results.txt)
-          RELEASE_NOTES="## Release v$PACKAGE_VERSION\n\n### Benchmark Results:\n$BENCH_RESULTS"
+          BENCH_RESULTS="$(cat bench_results.txt)"
+          RELEASE_NOTES="### Benchmark Results:
+          ```
+          $BENCH_RESULTS
+          ```"
           echo "$RELEASE_NOTES" > release_notes.md
           gh release create v$PACKAGE_VERSION --title "v$PACKAGE_VERSION" --notes-file release_notes.md
