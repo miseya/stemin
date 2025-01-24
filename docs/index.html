@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.22.2/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.22.2/dist/js/uikit.min.js"></script>
+  </head>
+  <body>
+    <div class="uk-section uk-section-primary">
+      <div class="uk-container uk-container-small">
+        <h1 class="uk-container">
+          Stemin: Modern Indonesian Stemmer for JavaScript
+        </h1>
+        <div class="uk-grid">
+          <a class="uk-link-text" href="https://github.com/miseya/stemin">GitHub</a>
+          <a class="uk-link-text" href="https://www.npmjs.com/package/stemin">npm</a>
+        </div>
+      </div>
+    </div>
+    <div class="uk-section uk-padding">
+      <form class="uk-container uk-container-xsmall">
+        <legend class="uk-legend uk-margin">Ketik sesuatu!</legend>
+        <textarea
+          id="input"
+          class="uk-textarea"
+          placeholder="Perekonomian Indonesia sedang dalam pertumbuhan yang membanggakan"
+        ></textarea>
+      </form>
+    </div>
+    <div class="uk-section uk-section-muted uk-padding">
+      <form class="uk-container uk-container-xsmall">
+        <legend class="uk-legend uk-margin">Hasil</legend>
+        <textarea
+          id="output"
+          class="uk-textarea"
+          placeholder="ekonomi indonesia sedang dalam tumbuh yang bangga"
+          readonly
+        ></textarea>
+        <small>Berhasil dalam <span id="time">0</span> detik</small>
+      </form>
+    </div>
+    <script type="module">
+import * as Stemin from 'https://esm.sh/stemin'
+
+const input = document.querySelector('#input')
+const output = document.querySelector('#output')
+const time = document.querySelector('#time')
+const stemmer = new Stemin.MPStemmer()
+
+input.addEventListener('keyup', (e) => {
+  const start = performance.now()
+  const text = e.target.value
+  const tokens = text.trim().toLowerCase().replace(/[^a-z- ]/g, '').split(/ |-/)
+  output.textContent = ''
+
+  if (!text.length || !tokens.length) return
+
+  const res = []
+
+  tokens.forEach((token) => res.push(stemmer.stem(token)))
+  output.textContent += res.join(' ')
+  time.textContent = (performance.now() - start)
+})
+
+window.Stemin = Stemin
+window.stemmer = stemmer
+    </script>
+  </body>
+</html>

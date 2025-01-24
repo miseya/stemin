@@ -8,7 +8,7 @@
 
 JavaScript library for stemming Indonesian words, based heavily on [mpstemmer](https://github.com/ariaghora/mpstemmer).
 
-`stemin` memberikan dukungan untuk mengubah kata tidak baku yang berimbuhan, lihat [penggunaan](#penggunaan) untuk contoh lebih lengkap.
+`stemin` memberikan dukungan untuk mengubah kata tidak baku yang berimbuhan, lihat [penggunaan](#penggunaan) untuk contoh lebih lengkap, atau [coba sekarang](https://miseya.github.io/stemin)!
 
 ## Instalasi
 

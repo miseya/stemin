@@ -183,7 +183,7 @@ export const rules = {
   ],
 
   'rule 33: pe-C1erC2 -> per-C1erC2, C != {r|w|y|l|m|n}': [
-    ['', '']
+    ['terpercaya', 'percaya']
   ]
 }
 
