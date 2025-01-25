@@ -48,6 +48,23 @@ stemmer.stem('kunaon') // naon
 // menambahkan kata ganti atau sinonim
 stemmer.synonyms.set('santuy', 'santai')
 stemmer.stem('nyantuy') // santai
+
+// penggunaan untuk stemming lebih dari 1 kata
+const tokenize = (text) => text
+    // hapus spasi di awal dan akhir teks
+    .trim()
+    // ubah menjadi huruf kecil
+    .toLowerCase()
+    // hapus non-huruf, tanda hubung, dan spasi
+    .replace(/[^a-z- ]/g, '')
+    // pisah per kata
+    .split(/ |-/)
+
+let result = tokenize('Perekonomian Indonesia sedang dalam pertumbuhan yang membanggakan')
+    .map((token) => stemmer.stem(token))
+    .join(' ')
+
+console.log(result) // ekonomi indonesia sedang dalam tumbuh yang bangga
 ```
 
 ## Perbandingan
